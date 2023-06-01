@@ -216,7 +216,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     )! as HTMLUListElement;
     listEl.innerHTML = "";
     for (const projectItem of this.assignedProjects) {
-      new ProjectItem(this.element.id, projectItem)
+      new ProjectItem(this.element.querySelector('ul')!.id, projectItem)
     }
   }
 }
