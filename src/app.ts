@@ -189,19 +189,20 @@ class ProjectItem
     this.configure();
     this.renderContent();
   }
-  
+
   @autobind
   dragStartHandler(event: DragEvent) {
-    console.log(event)
+    event.dataTransfer!.setData("text/plain", this.project.id);
+    event.dataTransfer!.effectAllowed = "move";
   }
 
   dragEndHandler(_: DragEvent) {
-    console.log('DragEnd')
+    console.log("DragEnd");
   }
 
   configure() {
-    this.element.addEventListener('dragstart', this.dragStartHandler)
-    this.element.addEventListener('dragend', this.dragEndHandler)
+    this.element.addEventListener("dragstart", this.dragStartHandler);
+    this.element.addEventListener("dragend", this.dragEndHandler);
   }
 
   renderContent() {
@@ -222,28 +223,32 @@ class ProjectList
     super("project-list", "app", false, `${type}-projects`);
     this.assignedProjects = [];
 
-    
     this.configure();
     this.renderContent();
   }
-  
-  dragOverHandler(_: DragEvent) {
-    const listEl = this.element.querySelector('ul')!;
-    listEl.classList.add('droppable');
-  };
-  
-  dropHandler(_: DragEvent) {};
-  
+
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+      event.preventDefault();
+      const listEl = this.element.querySelector("ul")!;
+      listEl.classList.add("droppable");
+    }
+  }
+
+  dropHandler(event: DragEvent) {
+    console.log(event.dataTransfer!.getData('text/plain'))
+  }
+
   @autobind
   dragLeaveHandler(_: DragEvent) {
     const listEl = this.element.querySelector("ul")!;
     listEl.classList.remove("droppable");
-  };
-  
+  }
+
   configure() {
-    this.element.addEventListener('dragover', this.dragOverHandler);
-    this.element.addEventListener('dragleave', this.dragLeaveHandler);
-    this.element.addEventListener('drop', this.dropHandler);
+    this.element.addEventListener("dragover", this.dragOverHandler);
+    this.element.addEventListener("dragleave", this.dragLeaveHandler);
+    this.element.addEventListener("drop", this.dropHandler);
 
     projectState.addListener((projects: Project[]) => {
       const relevantProjects = projects.filter((project) => {
