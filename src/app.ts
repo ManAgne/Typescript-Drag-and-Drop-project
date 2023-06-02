@@ -67,6 +67,10 @@ class ProjectState extends State<Project> {
       listenerFn(this.projects.slice());
     }
   }
+
+  moveProject() {
+
+  }
 }
 
 const projectState = ProjectState.getInstance();
@@ -227,6 +231,7 @@ class ProjectList
     this.renderContent();
   }
 
+  @autobind
   dragOverHandler(event: DragEvent) {
     if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
       event.preventDefault();
